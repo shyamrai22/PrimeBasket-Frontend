@@ -1,0 +1,27 @@
+
+> prime-basket-frontend@0.0.0 start
+> ng serve --port 4201 --host localhost
+
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 423.60 kB | 
+polyfills.js        | polyfills     |  88.09 kB | 
+styles.css          | styles        |   5.45 kB | 
+
+                    | Initial total | 517.13 kB
+
+Application bundle generation complete. [4.019 seconds]
+
+Watch mode enabled. Watching for file changes...
+  ➜  Local:   http://localhost:4201/
+
+No output file changes.
+
+Application bundle generation complete. [3.592 seconds]
+
+Initial chunk files | Names  |  Raw size
+main.js             | main   | 458.21 kB | 
+styles.css          | styles |   5.54 kB | 
+
+Application bundle generation complete. [3.763 seconds]
+
+Page reload sent to client(s).

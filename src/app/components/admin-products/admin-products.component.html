@@ -1,0 +1,132 @@
+<div class="admin-page">
+  <header class="admin-header">
+    <div class="header-main">
+      <h1 class="text-gradient">Product Catalogue <span class="badge-pill">{{ filteredProducts.length }} Active</span></h1>
+      <p>Manage product visibility and platform compliance</p>
+    </div>
+    <div class="header-tools">
+      <div class="view-toggle">
+        <button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">Grid</button>
+        <button [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">List</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter Bar -->
+  <div class="filter-controls sticky-bar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Search by product or merchant name...">
+    </div>
+
+    <div class="filter-pills">
+      <button 
+        *ngFor="let cat of categories"
+        (click)="selectedCategory = cat; applyFilters()"
+        [class.active]="selectedCategory === cat"
+        class="filter-pill">
+        {{ cat }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid View -->
+  <div class="product-status-grid" *ngIf="viewMode === 'grid'">
+    <div class="status-card glass-card" *ngFor="let product of filteredProducts">
+      <div class="card-main">
+        <img [src]="product.imageUrl || 'https://via.placeholder.com/80?text=P'" class="p-thumb">
+        <div class="p-info">
+          <span class="cat-badge">{{ product.category }}</span>
+          <h3 class="p-name">{{ product.name }}</h3>
+          <span class="m-label">Listed by <span class="m-name">Merchant #{{ product.id % 5 + 1 }}</span></span>
+        </div>
+      </div>
+
+      <div class="card-stats">
+        <div class="s-price">₹{{ product.price | number }}</div>
+        <div class="s-stock">
+          <span class="stock-dot" [ngClass]="{
+            'green': product.stock > 10,
+            'amber': product.stock <= 10 && product.stock > 0,
+            'red': product.stock === 0
+          }"></span>
+          {{ product.stock }} units
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <div class="status-toggle-group">
+          <button 
+            class="toggle-btn active" 
+            [class.selected]="product.status === 'Active'" 
+            (click)="confirmStatusChange(product, 'Active')"
+            title="Set Active">✅</button>
+          <button 
+            class="toggle-btn inactive" 
+            [class.selected]="product.status === 'Inactive'" 
+            (click)="confirmStatusChange(product, 'Inactive')"
+            title="Set Inactive">⏸</button>
+          <button 
+            class="toggle-btn flagged" 
+            [class.selected]="product.status === 'Flagged'" 
+            (click)="confirmStatusChange(product, 'Flagged')"
+            title="Flag Product">🚩</button>
+        </div>
+        <span class="status-label">{{ product.status }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- List View -->
+  <div class="table-container glass-card" *ngIf="viewMode === 'list'">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th class="text-right">Control</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts">
+          <td class="product-cell">
+            <img [src]="product.imageUrl || 'https://via.placeholder.com/40?text=P'" class="admin-thumb">
+            <div class="p-text">
+              <span class="p-name">{{ product.name }}</span>
+              <span class="m-name-small">Merchant #{{ product.id % 5 + 1 }}</span>
+            </div>
+          </td>
+          <td><span class="cat-tag">{{ product.category }}</span></td>
+          <td class="amount-text">₹{{ product.price | number }}</td>
+          <td>{{ product.stock }}</td>
+          <td><span class="status-pill" [attr.data-status]="product.status">{{ product.status }}</span></td>
+          <td class="text-right">
+            <div class="status-toggle-group small">
+               <!-- Same toggle buttons but smaller -->
+               <button class="toggle-btn" [class.selected]="product.status === 'Active'" (click)="confirmStatusChange(product, 'Active')">✅</button>
+               <button class="toggle-btn" [class.selected]="product.status === 'Inactive'" (click)="confirmStatusChange(product, 'Inactive')">⏸</button>
+               <button class="toggle-btn" [class.selected]="product.status === 'Flagged'" (click)="confirmStatusChange(product, 'Flagged')">🚩</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" *ngIf="pendingStatusChange">
+  <div class="modal-card glass-card scale-in">
+    <h3>Confirm Status Change</h3>
+    <p>Set <strong>{{ pendingStatusChange.product.name }}</strong> to <strong>{{ pendingStatusChange.newStatus }}</strong>?</p>
+    <div class="modal-footer">
+      <button class="btn-text" (click)="pendingStatusChange = null">Cancel</button>
+      <button class="btn btn-primary" (click)="executeStatusChange()">Confirm Change</button>
+    </div>
+  </div>
+</div>

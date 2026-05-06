@@ -1,0 +1,154 @@
+<div class="merchant-page">
+  <header class="merchant-header">
+    <div class="header-main">
+      <h1 class="text-gradient">My Products <span class="badge-pill">{{ products.length }} items</span></h1>
+      <p>Manage your inventory and product listings</p>
+    </div>
+    <button class="btn btn-primary" (click)="openDrawer('add')">
+      <span class="icon">+</span> Add New Product
+    </button>
+  </header>
+
+  <!-- Filter Bar -->
+  <div class="filter-controls sticky-bar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Search products...">
+    </div>
+
+    <div class="filter-pills">
+      <button 
+        *ngFor="let stat of ['All', 'Active', 'Inactive', 'Flagged']"
+        (click)="filterStatus = stat; applyFilters()"
+        [class.active]="filterStatus === stat"
+        [class.danger-tab]="stat === 'Flagged' && flaggedCount > 0"
+        class="filter-pill">
+        {{ stat }} <span class="pill-count" *ngIf="stat === 'Flagged' && flaggedCount > 0">{{ flaggedCount }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="product-grid" *ngIf="products.length > 0; else emptyState">
+    <div class="product-card glass-card scale-in" *ngFor="let p of filteredProducts">
+      <div class="card-image">
+        <img [src]="p.imageUrl || 'https://via.placeholder.com/300x200?text=Product'" alt="{{ p.name }}">
+        <span class="status-badge" [attr.data-status]="p.status">{{ p.status }}</span>
+      </div>
+      
+      <div class="card-body">
+        <div class="p-meta">
+          <span class="category">{{ p.category }}</span>
+        </div>
+        <h3 class="p-name">{{ p.name }}</h3>
+        <p class="p-desc">{{ p.description | slice:0:80 }}{{ p.description.length > 80 ? '...' : '' }}</p>
+        
+        <div class="p-pricing">
+          <span class="price">₹{{ p.price | number }}</span>
+          <span class="stock-status">
+            <span class="dot" [class.red]="p.stock === 0" [class.amber]="p.stock > 0 && p.stock < 10" [class.teal]="p.stock >= 10"></span>
+            {{ p.stock }} in stock
+          </span>
+        </div>
+      </div>
+
+      <div class="card-footer" *ngIf="p.status !== 'Flagged'">
+        <button class="btn-icon teal" (click)="openDrawer('edit', p)" title="Edit">✏️</button>
+        <button class="btn-icon red" (click)="confirmDelete(p)" title="Delete">🗑️</button>
+      </div>
+
+      <!-- Flagged Overlay -->
+      <div class="flagged-overlay" *ngIf="p.status === 'Flagged'">
+        <div class="flag-content">
+          <span class="flag-icon">🚩</span>
+          <p>Product Flagged by Admin</p>
+          <button class="btn-small-outline" (click)="viewFlagReason(p)">View Reason</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state-full glass-card">
+      <div class="empty-icon">📦</div>
+      <h3>No products listed yet</h3>
+      <p>Start your business by adding your first product to the catalog.</p>
+      <button class="btn btn-primary" (click)="openDrawer('add')">Add Your First Product</button>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Slide-in Drawer -->
+<div class="drawer-overlay" *ngIf="isDrawerOpen" (click)="closeDrawer()">
+  <div class="drawer-content glass-card slide-left" (click)="$event.stopPropagation()">
+    <div class="drawer-header">
+      <h2>{{ drawerMode === 'add' ? 'Add New Product' : 'Edit Product' }}</h2>
+      <button class="btn-close" (click)="closeDrawer()">×</button>
+    </div>
+
+    <form class="drawer-form" #productForm="ngForm" (ngSubmit)="saveProduct()">
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" [(ngModel)]="currentProduct.name" name="name" required placeholder="e.g. Sony WH-1000XM5">
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+        <select [(ngModel)]="currentProduct.category" name="category" required>
+          <option value="Electronics">Electronics</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Home Decor">Home Decor</option>
+          <option value="Fitness">Fitness</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="currentProduct.description" name="description" rows="4" required placeholder="Describe your product..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (₹)</label>
+          <div class="input-with-icon">
+            <span class="icon">₹</span>
+            <input type="number" [(ngModel)]="currentProduct.price" name="price" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Stock</label>
+          <input type="number" [(ngModel)]="currentProduct.stock" name="stock" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Image URL</label>
+        <input type="text" [(ngModel)]="currentProduct.imageUrl" name="imageUrl" placeholder="https://image-url.com/photo.jpg">
+        <div class="image-preview" *ngIf="currentProduct.imageUrl">
+          <img [src]="currentProduct.imageUrl" alt="Preview">
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button type="button" class="btn-ghost" (click)="closeDrawer()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid">
+          {{ drawerMode === 'add' ? 'Save Product' : 'Update Product' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Inline Confirmation -->
+<div class="delete-confirm-overlay" *ngIf="productToDelete">
+  <div class="confirm-box glass-card scale-in">
+    <h3>Delete Product?</h3>
+    <p>Are you sure you want to delete <strong>{{ productToDelete.name }}</strong>? This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn-ghost" (click)="productToDelete = null">Cancel</button>
+      <button class="btn btn-primary" (click)="executeDelete()">Delete Permanently</button>
+    </div>
+  </div>
+</div>

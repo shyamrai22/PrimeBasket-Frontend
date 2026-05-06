@@ -1,0 +1,103 @@
+<div class="auth-container">
+  <div class="auth-card glass-card">
+    <div class="auth-header">
+      <h2 class="text-gradient">Join PrimeBasket</h2>
+      <p>Create your account to continue</p>
+    </div>
+
+    <!-- Role Selection -->
+    <div class="role-selector">
+      <div class="role-card" 
+           [class.active]="registerData.role === 'Customer'"
+           (click)="selectRole('Customer')">
+        <div class="role-icon">🛍️</div>
+        <div class="role-text">
+          <span class="role-title">Customer</span>
+          <span class="role-desc">Shop the best deals</span>
+        </div>
+        <div class="check-mark" *ngIf="registerData.role === 'Customer'">✓</div>
+      </div>
+
+      <div class="role-card merchant" 
+           [class.active]="registerData.role === 'Merchant'"
+           (click)="selectRole('Merchant')">
+        <div class="role-icon">🏪</div>
+        <div class="role-text">
+          <span class="role-title">Merchant</span>
+          <span class="role-desc">Sell on PrimeBasket</span>
+        </div>
+        <div class="check-mark" *ngIf="registerData.role === 'Merchant'">✓</div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="onRegister()">
+      <!-- Merchant Details (Slides down) -->
+      <div class="merchant-details slide-down" *ngIf="registerData.role === 'Merchant'">
+        <div class="form-group">
+          <label>Merchant Access Key</label>
+          <div class="input-wrapper">
+            <input type="password" [(ngModel)]="registerData.roleKey" name="roleKey" placeholder="Enter key provided by team" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Business Name</label>
+          <input type="text" [(ngModel)]="registerData.businessName" name="businessName" placeholder="e.g. Acme Electronics" required>
+        </div>
+
+        <div class="form-group">
+          <label>Business Type</label>
+          <select [(ngModel)]="registerData.businessType" name="businessType" class="admin-select" required>
+            <option value="">Select Category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Home & Garden">Home & Garden</option>
+            <option value="Health & Beauty">Health & Beauty</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Store Description</label>
+          <textarea [(ngModel)]="registerData.storeDescription" name="storeDescription" placeholder="Tell us about your products..." required></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" [(ngModel)]="registerData.fullName" name="fullName" placeholder="Enter your name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" [(ngModel)]="registerData.email" name="email" placeholder="name@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="registerData.password" name="password" placeholder="••••••••" required>
+      </div>
+
+      <div class="error-banner" *ngIf="error">{{ error }}</div>
+
+      <button type="submit" class="btn btn-primary full-width" [disabled]="loading">
+        {{ loading ? 'Creating Account...' : 'Register' }}
+      </button>
+
+      <div class="auth-footer">
+        <span>Already have an account?</span>
+        <a routerLink="/login">Sign In</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Success Overlay for Merchants -->
+<div class="success-overlay" *ngIf="showSuccess">
+  <div class="success-card glass-card scale-in">
+    <div class="success-icon">✓</div>
+    <h2>Application Submitted!</h2>
+    <p>Your merchant account is under review. You can log in, but full access will unlock after approval.</p>
+    <button class="btn btn-primary" routerLink="/login">Go to Login</button>
+  </div>
+</div>

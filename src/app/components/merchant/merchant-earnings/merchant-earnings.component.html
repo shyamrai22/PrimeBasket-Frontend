@@ -1,0 +1,77 @@
+<div class="merchant-page">
+  <header class="merchant-header">
+    <div class="header-main">
+      <h1 class="text-gradient">Earnings & Finances</h1>
+      <p>Monitor your sales performance and revenue payouts</p>
+    </div>
+    <div class="payout-status glass-card">
+      <span class="label">Next Payout</span>
+      <span class="value">₹{{ nextPayoutAmount | number }}</span>
+      <span class="date">Expected: 15th May</span>
+    </div>
+  </header>
+
+  <!-- Financial Summary -->
+  <div class="earnings-summary">
+    <div class="summary-card glass-card teal-glow">
+      <div class="card-icon">🏦</div>
+      <div class="card-data">
+        <span class="label">Total Earned</span>
+        <h2>₹{{ totalEarned | number }}</h2>
+        <span class="trend positive">↑ 12% from last month</span>
+      </div>
+    </div>
+    <div class="summary-card glass-card">
+      <div class="card-icon">📋</div>
+      <div class="card-data">
+        <span class="label">Items Sold</span>
+        <h2>{{ totalItemsSold }}</h2>
+        <span class="trend">Across {{ totalOrders }} orders</span>
+      </div>
+    </div>
+    <div class="summary-card glass-card">
+      <div class="card-icon">🏷️</div>
+      <div class="card-data">
+        <span class="label">Avg. Order Value</span>
+        <h2>₹{{ avgOrderValue | number: '1.0-0' }}</h2>
+        <span class="trend">Market average: ₹450</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Breakdown -->
+  <div class="financial-grid">
+    <div class="revenue-history glass-card">
+      <div class="card-header">
+        <h3>Revenue History</h3>
+      </div>
+      <div class="chart-placeholder">
+        <div class="bar-chart">
+          <div class="bar" *ngFor="let month of monthlyData" [style.height]="month.percentage + '%'">
+            <span class="bar-value">₹{{ month.value }}</span>
+            <span class="bar-label">{{ month.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-earnings glass-card">
+      <div class="card-header">
+        <h3>Recent Payouts</h3>
+      </div>
+      <div class="payout-list">
+        <div class="payout-item" *ngFor="let payout of payouts">
+          <div class="payout-info">
+            <span class="payout-id">Ref: {{ payout.ref }}</span>
+            <span class="payout-date">{{ payout.date | date:'mediumDate' }}</span>
+          </div>
+          <div class="payout-amount">
+            <span class="amount">₹{{ payout.amount | number }}</span>
+            <span class="status-dot" [class.success]="payout.status === 'Paid'"></span>
+            <span class="status-text">{{ payout.status }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

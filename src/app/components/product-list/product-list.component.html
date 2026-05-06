@@ -1,0 +1,86 @@
+<div class="product-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content container">
+      <h1 class="hero-title">Discover <span class="text-gradient">Premium</span> Products</h1>
+      <p class="hero-subtitle">Curated for you. Delivered fast. Experience the next generation of shopping.</p>
+      <button class="btn btn-primary btn-pill animate-pulse-glow" (click)="scrollToProducts()">Shop Now</button>
+    </div>
+    <div class="hero-background"></div>
+  </section>
+
+  <div class="container" id="products-grid">
+    <!-- Filter Bar -->
+    <div class="filter-bar glass">
+      <div class="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="applyFilters()" 
+          placeholder="Search products..." 
+          class="search-input">
+      </div>
+
+      <div class="category-section">
+        <span class="filter-label">Categories</span>
+        <div class="category-pills-wrapper">
+          <div class="category-pills">
+            <button 
+              *ngFor="let cat of categories" 
+              (click)="selectCategory(cat)"
+              [class.active]="selectedCategory === cat"
+              class="category-pill">
+              {{ cat }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-grid">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-info">
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line long"></div>
+          <div class="skeleton-line med"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && filteredProducts.length === 0" class="empty-state glass-card">
+      <div class="empty-icon">🔍</div>
+      <h3>No products found</h3>
+      <p>Try adjusting your search or category filters.</p>
+      <button class="btn btn-secondary mt-3" (click)="resetFilters()">Clear All Filters</button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" *ngIf="!loading && filteredProducts.length > 0">
+      <div class="product-card glass-card" *ngFor="let product of filteredProducts" [routerLink]="['/product', product.id]">
+        <div class="product-image-container">
+          <img [src]="product.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image'" [alt]="product.name" class="product-image">
+          
+          <div class="badge badge-coral product-badge" *ngIf="product.stock < 5 && product.stock > 0">Low Stock</div>
+          <div class="badge badge-muted product-badge" *ngIf="product.stock === 0">Out of Stock</div>
+        </div>
+
+        <div class="product-details">
+          <span class="product-category">{{ product.category }}</span>
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-desc">{{ product.description | slice:0:80 }}{{ product.description.length > 80 ? '...' : '' }}</p>
+          
+          <div class="product-footer">
+            <span class="price-text">₹{{ product.price | number:'1.2-2' }}</span>
+            <span class="btn btn-primary btn-sm btn-pill">View Details</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

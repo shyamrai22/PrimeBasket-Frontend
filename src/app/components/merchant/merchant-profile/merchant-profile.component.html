@@ -1,0 +1,73 @@
+<div class="merchant-page animate-fade-in">
+  <header class="merchant-header">
+    <div class="header-main">
+      <h1 class="text-gradient">Store Profile</h1>
+      <p>Configure your public store identity and contact information</p>
+    </div>
+    <div class="status-indicator" [class.approved]="user?.status === 'Approved'">
+      <span class="dot"></span>
+      {{ user?.status }} Account
+    </div>
+  </header>
+
+  <div class="profile-grid">
+    <!-- Main Info -->
+    <div class="profile-card glass-card">
+      <div class="card-section">
+        <div class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <h3>Basic Information</h3>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Store Owner Name</label>
+            <div class="input-wrapper">
+              <input type="text" [value]="user?.fullName" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Business Email</label>
+            <div class="input-wrapper">
+              <input type="email" [value]="user?.email" disabled>
+            </div>
+            <span class="input-hint">Verified primary contact email</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <h3>Public Store Details</h3>
+        </div>
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" [(ngModel)]="profile.storeName" placeholder="e.g. Saffron Electronics">
+        </div>
+        <div class="form-group">
+          <label>Store Description</label>
+          <textarea [(ngModel)]="profile.description" rows="3" placeholder="Tell customers about your brand..."></textarea>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <button class="btn btn-primary" (click)="saveProfile()">
+          Save Changes
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats & Account -->
+    <div class="side-info">
+      <div class="glass-card stat-mini">
+        <span class="label">Member Since</span>
+        <span class="value">May 2026</span>
+      </div>
+      
+    </div>
+  </div>
+</div>

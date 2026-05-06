@@ -1,0 +1,65 @@
+<div class="profile-page container">
+  <div class="profile-header">
+    <div class="avatar-circle">
+      {{ userName.charAt(0).toUpperCase() }}
+    </div>
+    <div class="user-info">
+      <h2>{{ userName }}</h2>
+      <p>{{ userEmail }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading profile data...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <p>{{ error }}</p>
+    <button class="btn btn-secondary mt-3" (click)="fetchProfileData()">Try Again</button>
+  </div>
+
+  <div class="profile-content" *ngIf="!loading && !error">
+    <!-- Wallet Summary Box -->
+    <div class="wallet-summary-card card">
+      <div class="summary-icon">💰</div>
+      <div class="summary-details">
+        <h3>Wallet Balance</h3>
+        <p class="balance-amount">&#8377;{{ balance | number:'1.2-2' }}</p>
+      </div>
+      <a href="/wallet" class="btn btn-primary ml-auto">Recharge</a>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="transactions-section card mt-4">
+      <div class="section-header">
+        <h3>Transaction History</h3>
+        <span class="badge" *ngIf="transactions.length > 0">{{ transactions.length }}</span>
+      </div>
+
+      <div class="empty-state" *ngIf="transactions.length === 0">
+        <div class="empty-icon">💸</div>
+        <p>No transactions found.</p>
+      </div>
+
+      <div class="transaction-list" *ngIf="transactions.length > 0">
+        <div class="transaction-item" *ngFor="let txn of transactions">
+          <div class="txn-icon" [ngClass]="txn.type.toLowerCase()">
+            <span *ngIf="txn.type.toUpperCase() === 'CREDIT'">↓</span>
+            <span *ngIf="txn.type.toUpperCase() === 'DEBIT'">↑</span>
+          </div>
+          <div class="txn-info">
+            <h4>{{ txn.type.toUpperCase() === 'CREDIT' ? 'Added to Wallet' : 'Payment for Order' }}</h4>
+            <p class="txn-date">{{ txn.createdAt | date:'medium' }}</p>
+          </div>
+          <div class="txn-amount" [ngClass]="txn.type.toLowerCase()">
+            {{ txn.type.toUpperCase() === 'CREDIT' ? '+' : '-' }}&#8377;{{ txn.amount | number:'1.2-2' }}
+          </div>
+          <div class="txn-status">
+            {{ txn.status }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

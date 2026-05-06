@@ -1,0 +1,193 @@
+.sticky-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--admin-bg);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--admin-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+@media (min-width: 992px) {
+  .sticky-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-box svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--admin-text-muted);
+}
+
+.search-box input {
+  width: 100%;
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  padding: 0.6rem 1rem 0.6rem 2.75rem;
+  border-radius: var(--radius-full);
+  color: var(--admin-text-primary);
+  font-size: 0.9rem;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-pill {
+  white-space: nowrap;
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-pill:hover {
+  border-color: rgba(108, 99, 255, 0.4);
+}
+
+.filter-pill.active {
+  background: var(--admin-primary);
+  color: white;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 15px rgba(108, 99, 255, 0.3);
+}
+
+/* Table Styles (Admin Specific) */
+.table-container {
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 1rem 1.5rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--admin-text-muted);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  font-size: 0.9rem;
+}
+
+.admin-table tr:hover {
+  background: rgba(108, 99, 255, 0.05);
+}
+
+.mono {
+  font-family: var(--font-admin-data);
+  font-weight: 600;
+}
+
+.clickable { cursor: pointer; }
+.clickable:hover { color: var(--admin-primary); text-decoration: underline; }
+
+.amount-text {
+  color: var(--admin-success);
+  font-weight: 700;
+  font-family: var(--font-admin-data);
+}
+
+/* Custom Select Pill */
+.status-selector-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-select-pill {
+  appearance: none;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+  padding: 0.4rem 2rem 0.4rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+.status-select-pill:hover {
+  border-color: var(--admin-primary);
+  color: var(--admin-text-primary);
+}
+
+.updating {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.inline-spinner {
+  position: absolute;
+  right: -24px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--admin-border);
+  border-top-color: var(--admin-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Status Pills */
+.status-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.status-pill[data-status="Pending"] { background: rgba(245, 158, 11, 0.1); color: var(--admin-warning); }
+.status-pill[data-status="Paid"] { background: rgba(59, 130, 246, 0.1); color: var(--admin-info); }
+.status-pill[data-status="Delivered"] { background: rgba(16, 185, 129, 0.1); color: var(--admin-success); }
+.status-pill[data-status="Cancelled"] { background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); }
+
+/* Badge Small */
+.badge-small {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.badge-small.COD { background: rgba(245, 158, 11, 0.1); color: var(--admin-warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+.badge-small.Wallet { background: rgba(108, 99, 255, 0.1); color: var(--admin-primary); border: 1px solid rgba(108, 99, 255, 0.2); }

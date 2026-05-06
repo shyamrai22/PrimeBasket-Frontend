@@ -1,0 +1,108 @@
+<div class="merchant-page">
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="banner-content">
+      <h1>Welcome back, <span class="merchant-name">{{ user?.email?.split('@')[0] }}</span> 👋</h1>
+      <p>Here's how your store is performing today.</p>
+    </div>
+    <div class="banner-visual">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="stats-grid">
+    <div class="stat-card glass-card">
+      <div class="stat-icon amber">₹</div>
+      <div class="stat-info">
+        <span class="stat-label">Total Revenue</span>
+        <h2 class="stat-value">₹{{ stats.totalRevenue | number }}</h2>
+      </div>
+    </div>
+    <div class="stat-card glass-card">
+      <div class="stat-icon teal">📦</div>
+      <div class="stat-info">
+        <span class="stat-label">Active Products</span>
+        <h2 class="stat-value">{{ stats.activeProducts }}</h2>
+      </div>
+    </div>
+    <div class="stat-card glass-card">
+      <div class="stat-icon blue">🛒</div>
+      <div class="stat-info">
+        <span class="stat-label">Orders This Month</span>
+        <h2 class="stat-value">{{ stats.monthlyOrders }}</h2>
+      </div>
+    </div>
+    <div class="stat-card glass-card">
+      <div class="stat-icon amber">⏳</div>
+      <div class="stat-info">
+        <span class="stat-label">Pending Orders</span>
+        <h2 class="stat-value">{{ stats.pendingOrders }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Recent Orders -->
+    <div class="recent-orders glass-card">
+      <div class="card-header">
+        <h3>Recent Orders</h3>
+        <a routerLink="/merchant/orders" class="view-all">View All Orders →</a>
+      </div>
+      <div class="table-wrapper">
+        <table class="merchant-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of recentOrders">
+              <td>#{{ order.id }}</td>
+              <td><span class="status-pill" [attr.data-status]="order.status">{{ order.status }}</span></td>
+              <td class="amount">₹{{ order.totalAmount | number }}</td>
+              <td class="date">{{ order.createdAt | date:'shortDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Product Health -->
+    <div class="product-health glass-card">
+      <div class="card-header">
+        <h3>Product Health</h3>
+      </div>
+      
+      <div class="health-section" *ngIf="lowStockProducts.length > 0; else healthyState">
+        <div class="health-group red" *ngIf="outOfStockCount > 0">
+          <span class="group-title">Out of Stock ({{ outOfStockCount }})</span>
+          <div class="health-item" *ngFor="let p of outOfStockProducts">
+            <span>{{ p.name }}</span>
+            <button class="btn-quick-stock">Restock</button>
+          </div>
+        </div>
+
+        <div class="health-group amber" *ngIf="lowStockCount > 0">
+          <span class="group-title">Low Stock ({{ lowStockCount }})</span>
+          <div class="health-item" *ngFor="let p of lowStockProducts">
+            <span>{{ p.name }}</span>
+            <span class="stock-badge">{{ p.stock }} left</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #healthyState>
+        <div class="healthy-state">
+          <div class="check-icon">✓</div>
+          <p>All products are well-stocked 🎉</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

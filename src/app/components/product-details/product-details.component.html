@@ -1,0 +1,71 @@
+<div class="product-details-page container">
+  <div *ngIf="loading" class="loading-state glass-card">
+    <div class="spinner"></div>
+    <p>Loading product details...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state glass-card">
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="fetchProduct()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading && !error && product" class="details-grid">
+    <!-- Left: Image Section -->
+    <div class="image-section glass-card">
+      <img [src]="product.imageUrl || 'https://via.placeholder.com/600x600?text=No+Image'" [alt]="product.name" class="main-image">
+      <div class="image-overlay glass">
+        <span class="badge badge-coral">{{ product.category }}</span>
+      </div>
+    </div>
+
+    <!-- Right: Info Section -->
+    <div class="info-section">
+      <nav class="breadcrumb">
+        <a routerLink="/">Home</a> / <span>{{ product.category }}</span>
+      </nav>
+
+      <span class="product-category-text">{{ product.category }}</span>
+      <h1 class="product-name">{{ product.name }}</h1>
+      
+      <div class="price-container">
+        <span class="price-text">₹{{ product.price | number:'1.2-2' }}</span>
+      </div>
+
+      <div class="stock-status" [class.out-of-stock]="product.stock === 0">
+        <span class="status-dot"></span>
+        <span *ngIf="product.stock > 5">In Stock ({{ product.stock }} units)</span>
+        <span *ngIf="product.stock <= 5 && product.stock > 0">Low Stock! Only {{ product.stock }} left</span>
+        <span *ngIf="product.stock === 0">Currently Out of Stock</span>
+      </div>
+
+      <p class="product-description">{{ product.description }}</p>
+
+      <div class="product-features glass-card">
+        <div class="feature-item">
+          <span class="feature-icon">🚚</span>
+          <div>
+            <strong>Fast Delivery</strong>
+            <p>Free shipping on orders above ₹999</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🛡️</span>
+          <div>
+            <strong>1 Year Warranty</strong>
+            <p>Brand warranty included</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-section">
+        <button 
+          class="btn btn-primary btn-xl full-width animate-pulse-glow" 
+          (click)="addToCart()"
+          [disabled]="product.stock === 0 || addingToCart">
+          <span *ngIf="!addingToCart">Add to Cart</span>
+          <span *ngIf="addingToCart">Adding...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

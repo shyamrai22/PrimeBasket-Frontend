@@ -1,0 +1,146 @@
+<div class="admin-page">
+  <header class="admin-header">
+    <div class="header-main">
+      <h1 class="text-gradient">Merchant Approvals <span class="badge-pill" *ngIf="pendingCount > 0">{{ pendingCount }} Pending</span></h1>
+      <p class="admin-subtitle">Review and manage seller registration requests</p>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <div class="tab-nav sticky-bar">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'Pending'" 
+      (click)="activeTab = 'Pending'">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      Pending 
+      <span class="tab-count" *ngIf="pendingCount > 0">{{ pendingCount }}</span>
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'Approved'" 
+      (click)="activeTab = 'Approved'">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      Approved
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'Rejected'" 
+      (click)="activeTab = 'Rejected'">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      Rejected
+    </button>
+  </div>
+
+  <div class="merchant-feed">
+    <!-- Pending Tab -->
+    <ng-container *ngIf="activeTab === 'Pending'">
+      <div class="merchant-card glass-card scale-in" *ngFor="let m of pendingMerchants">
+        <div class="m-avatar">{{ m.fullName | slice:0:1 | uppercase }}</div>
+        <div class="m-content">
+          <div class="m-primary">
+            <h3>{{ m.businessName || m.fullName }}</h3>
+            <span class="m-email">{{ m.email }} ({{ m.fullName }})</span>
+          </div>
+          <div class="m-meta">
+            <span class="meta-tag">{{ m.businessType || 'General' }}</span>
+            <span class="meta-tag">Applied {{ m.createdAt | date:'mediumDate' }}</span>
+          </div>
+          <p class="m-desc" *ngIf="m.storeDescription">{{ m.storeDescription }}</p>
+        </div>
+        <div class="m-actions">
+          <button class="btn-approve" (click)="openApproveModal(m)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Approve
+          </button>
+          <button class="btn-reject" (click)="openRejectModal(m)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Reject
+          </button>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="pendingMerchants.length === 0">
+        <div class="check-animation">✓</div>
+        <h3>All caught up!</h3>
+        <p>No pending merchant applications to review.</p>
+      </div>
+    </ng-container>
+
+    <!-- Approved Tab -->
+    <ng-container *ngIf="activeTab === 'Approved'">
+      <div class="merchant-card glass-card" *ngFor="let m of approvedMerchants">
+        <div class="m-avatar approved">{{ m.fullName | slice:0:1 | uppercase }}</div>
+        <div class="m-content">
+          <h3>{{ m.businessName || m.fullName }}</h3>
+          <span class="m-email">{{ m.email }} ({{ m.businessType }})</span>
+          <span class="approval-date">Approved on {{ m.createdAt | date:'mediumDate' }}</span>
+        </div>
+        <div class="m-actions">
+          <button class="btn-revoke" (click)="revokeMerchant(m)">Revoke Access</button>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="approvedMerchants.length === 0">
+        <p>No approved merchants yet.</p>
+      </div>
+    </ng-container>
+
+    <!-- Rejected Tab -->
+    <ng-container *ngIf="activeTab === 'Rejected'">
+      <div class="merchant-card glass-card" *ngFor="let m of rejectedMerchants">
+        <div class="m-avatar rejected">{{ m.fullName | slice:0:1 | uppercase }}</div>
+        <div class="m-content">
+          <h3>{{ m.fullName }}</h3>
+          <span class="m-email">{{ m.email }}</span>
+          <span class="rejection-reason">Reason: {{ m.rejectReason || 'No reason provided' }}</span>
+        </div>
+        <div class="m-actions">
+          <button class="btn-reapprove" (click)="reApproveMerchant(m)">Re-Approve</button>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="rejectedMerchants.length === 0">
+        <p>No rejected applications.</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal-overlay" *ngIf="modalType === 'approve'">
+  <div class="modal-card glass-card scale-in">
+    <div class="modal-header">
+      <div class="icon-circle success">✓</div>
+      <h3>Approve Merchant?</h3>
+    </div>
+    <p><strong>{{ activeMerchant?.fullName }}</strong> will gain full access to list products and manage their storefront on PrimeBasket.</p>
+    <div class="modal-footer">
+      <button class="btn btn-text" (click)="closeModal()">Cancel</button>
+      <button class="btn btn-approve-solid" (click)="confirmApprove()">Confirm Approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal-overlay" *ngIf="modalType === 'reject'">
+  <div class="modal-card glass-card scale-in">
+    <div class="modal-header">
+      <div class="icon-circle danger">×</div>
+      <h3>Reject Application?</h3>
+    </div>
+    <p>Please provide a reason for rejecting <strong>{{ activeMerchant?.fullName }}</strong>.</p>
+    <textarea class="admin-textarea" [(ngModel)]="rejectionReason" placeholder="e.g. Business documentation incomplete..."></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-text" (click)="closeModal()">Cancel</button>
+      <button class="btn btn-reject-solid" (click)="confirmReject()">Confirm Rejection</button>
+    </div>
+  </div>
+</div>

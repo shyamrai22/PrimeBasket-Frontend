@@ -1,0 +1,71 @@
+<div class="merchant-page">
+  <header class="merchant-header">
+    <div class="header-main">
+      <h1 class="text-gradient">Order Fulfillment</h1>
+      <p>Manage incoming orders and update delivery status</p>
+    </div>
+  </header>
+
+  <!-- Status Tabs -->
+  <div class="status-tabs sticky-bar">
+    <button 
+      *ngFor="let tab of ['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']"
+      (click)="activeTab = tab; applyFilters()"
+      [class.active]="activeTab === tab"
+      class="tab-btn">
+      {{ tab }}
+    </button>
+  </div>
+
+  <!-- Orders List -->
+  <div class="orders-container">
+    <div class="order-card glass-card" *ngFor="let order of filteredOrders">
+      <div class="order-header">
+        <div class="o-main">
+          <span class="order-id">#{{ order.id }}</span>
+          <span class="order-date">{{ order.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="o-status">
+          <span class="status-pill" [attr.data-status]="order.status">{{ order.status }}</span>
+        </div>
+      </div>
+
+      <div class="order-customer">
+        <div class="customer-avatar">{{ order.customerName | slice:0:1 }}</div>
+        <div class="customer-info">
+          <span class="name">{{ order.customerName }}</span>
+          <span class="address">{{ order.shippingAddress }}</span>
+        </div>
+      </div>
+
+      <div class="order-items">
+        <div class="item-row" *ngFor="let item of order.items">
+          <div class="item-details">
+            <span class="item-name">{{ item.productName }}</span>
+            <span class="item-qty">x {{ item.quantity }}</span>
+          </div>
+          <span class="item-price">₹{{ item.unitPrice * item.quantity | number }}</span>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <div class="total-section">
+          <span class="label">Total Amount</span>
+          <span class="amount">₹{{ order.totalAmount | number }}</span>
+        </div>
+        <div class="actions" *ngIf="order.status !== 'Delivered' && order.status !== 'Cancelled'">
+          <button class="btn-action secondary" *ngIf="order.status === 'Pending'" (click)="updateStatus(order, 'Processing')">Process Order</button>
+          <button class="btn-action primary" *ngIf="order.status === 'Processing'" (click)="updateStatus(order, 'Shipped')">Mark as Shipped</button>
+          <button class="btn-action success" *ngIf="order.status === 'Shipped'" (click)="updateStatus(order, 'Delivered')">Confirm Delivery</button>
+          <button class="btn-action danger" *ngIf="order.status === 'Pending'" (click)="updateStatus(order, 'Cancelled')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-orders" *ngIf="filteredOrders.length === 0">
+      <div class="empty-icon">🛒</div>
+      <h3>No orders found</h3>
+      <p>Orders matching the "{{ activeTab }}" criteria will appear here.</p>
+    </div>
+  </div>
+</div>

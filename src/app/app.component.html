@@ -1,0 +1,27 @@
+<!-- Customer View -->
+<div *ngIf="!isAdminRoute && !isMerchantRoute" class="customer-layout">
+  <app-navbar></app-navbar>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<!-- Admin View (Mission Control) -->
+<div *ngIf="isAdminRoute" class="admin-layout" [class.is-collapsed]="adminSidebarCollapsed">
+  <app-admin-sidebar (toggle)="onAdminSidebarToggle($event)"></app-admin-sidebar>
+  <main class="admin-main">
+    <div class="admin-page-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+
+<!-- Merchant View (Portal) -->
+<div *ngIf="isMerchantRoute" class="merchant-layout" [class.is-collapsed]="merchantSidebarCollapsed">
+  <app-merchant-sidebar (toggle)="onMerchantSidebarToggle($event)"></app-merchant-sidebar>
+  <main class="merchant-main">
+    <div class="merchant-page-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

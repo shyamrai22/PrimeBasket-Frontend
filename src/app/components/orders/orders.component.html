@@ -1,0 +1,78 @@
+<div class="orders-page container">
+  <h1 class="page-title">My <span class="text-gradient">Orders</span></h1>
+
+  <div *ngIf="loading" class="loading-state glass-card">
+    <div class="spinner"></div>
+    <p>Loading your orders...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && orders.length === 0" class="empty-orders glass-card">
+    <div class="empty-illustration">📦</div>
+    <h2>No Orders Yet</h2>
+    <p>When you buy items, they will appear here. Ready to shop?</p>
+    <a routerLink="/" class="btn btn-primary btn-pill mt-4">Start Shopping</a>
+  </div>
+
+  <!-- Orders Feed -->
+  <div *ngIf="!loading && orders.length > 0" class="orders-feed">
+    <div class="order-card glass-card" *ngFor="let order of orders">
+      <!-- Order Header -->
+      <div class="order-header">
+        <div class="order-id-section">
+          <h3>Order #{{ order.id }}</h3>
+          <span class="order-date">{{ order.createdAt | date:'mediumDate' }}</span>
+        </div>
+        
+        <div class="order-status">
+          <span class="badge" [ngClass]="{
+            'badge-amber': order.status === 'Pending',
+            'badge-emerald': order.status === 'Completed' || order.status === 'Delivered',
+            'badge-red': order.status === 'Cancelled'
+          }">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="order-items">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th class="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of order.items">
+              <td class="product-cell">
+                <img [src]="item.imageUrl || 'https://via.placeholder.com/40?text=P'" class="item-mini-thumb">
+                <span>{{ item.productName }}</span>
+              </td>
+              <td>₹{{ item.price | number:'1.2-2' }}</td>
+              <td>{{ item.quantity }}</td>
+              <td class="text-right">₹{{ (item.price * item.quantity) | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Order Footer -->
+      <div class="order-footer">
+        <div class="payment-info">
+          <span class="payment-method-badge">
+            {{ order.paymentMethod }}
+          </span>
+        </div>
+        
+        <div class="order-total-section">
+          <span class="total-label">Total Paid:</span>
+          <span class="price-text">₹{{ order.totalAmount | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

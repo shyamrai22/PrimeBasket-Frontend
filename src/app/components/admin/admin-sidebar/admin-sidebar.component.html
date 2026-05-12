@@ -1,0 +1,67 @@
+<aside class="admin-sidebar" [class.is-collapsed]="isCollapsed">
+  <div class="sidebar-brand">
+    <div class="brand-monogram">PB</div>
+    <div class="brand-label" *ngIf="!isCollapsed">Admin Console</div>
+    <button class="btn-toggle" (click)="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" *ngIf="!isCollapsed" />
+        <path d="M9 18l6-6-6-6" *ngIf="isCollapsed" />
+      </svg>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <span class="section-title" *ngIf="!isCollapsed">Overview</span>
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span class="item-label" *ngIf="!isCollapsed">Dashboard</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="section-title" *ngIf="!isCollapsed">Commerce</span>
+      <a routerLink="/admin/orders" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+        </svg>
+        <span class="item-label" *ngIf="!isCollapsed">Orders</span>
+      </a>
+      <a routerLink="/admin/products" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" />
+        </svg>
+        <span class="item-label" *ngIf="!isCollapsed">Products</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="section-title" *ngIf="!isCollapsed">People</span>
+      <a routerLink="/admin/merchants" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="8.5" cy="7" r="4" /><polyline points="17 11 19 13 23 9" />
+        </svg>
+        <span class="item-label" *ngIf="!isCollapsed">Merchants</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-profile" *ngIf="!isCollapsed">
+      <div class="avatar">SA</div>
+      <div class="admin-info">
+        <span class="admin-name">Superadmin</span>
+        <span class="admin-role">System Console</span>
+      </div>
+    </div>
+    <div class="avatar" *ngIf="isCollapsed">SA</div>
+    <button class="btn-logout-admin" (click)="logout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9" />
+      </svg>
+    </button>
+  </div>
+</aside>

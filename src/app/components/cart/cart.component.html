@@ -1,0 +1,88 @@
+<div class="cart-page container">
+  <h1 class="page-title">Your <span class="text-gradient">Cart</span></h1>
+
+  <div *ngIf="loading" class="loading-state glass-card">
+    <div class="spinner"></div>
+    <p>Loading your cart...</p>
+  </div>
+
+  <!-- Empty Cart State -->
+  <div *ngIf="!loading && cartItems.length === 0" class="empty-cart glass-card">
+    <div class="empty-illustration">🛒</div>
+    <h2>Your cart is empty</h2>
+    <p>Looks like you haven't added anything to your basket yet.</p>
+    <a routerLink="/" class="btn btn-primary btn-pill mt-4">Start Shopping</a>
+  </div>
+
+  <!-- Cart Content -->
+  <div *ngIf="!loading && cartItems.length > 0" class="cart-grid">
+    <!-- Left: Item List -->
+    <div class="items-section">
+      <div class="cart-items-list">
+        <div class="cart-item glass-card" *ngFor="let item of cartItems">
+          <div class="item-main">
+            <img [src]="item.imageUrl || 'https://via.placeholder.com/100?text=Product'" [alt]="item.productName" class="item-thumb">
+            <div class="item-info">
+              <h3 class="item-name">{{ item.productName }}</h3>
+              <p class="item-unit-price">₹{{ item.price | number:'1.2-2' }} each</p>
+            </div>
+          </div>
+
+          <div class="item-actions">
+            <div class="quantity-controls">
+              <button class="qty-btn" (click)="updateQuantity(item.productId, item.quantity - 1)">-</button>
+              <span class="qty-value">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="updateQuantity(item.productId, item.quantity + 1)">+</button>
+            </div>
+            
+            <div class="item-total">
+              <span class="price-text">₹{{ (item.price * item.quantity) | number:'1.2-2' }}</span>
+            </div>
+
+            <button class="remove-btn" (click)="removeItem(item.productId)" title="Remove item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18 M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-ghost btn-danger mt-3" (click)="clearCart()">
+        Clear Entire Cart
+      </button>
+    </div>
+
+    <!-- Right: Summary -->
+    <div class="summary-section">
+      <div class="summary-card glass-card sticky-card">
+        <h2 class="summary-title">Order Summary</h2>
+        
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>₹{{ cartTotal | number:'1.2-2' }}</span>
+        </div>
+        
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="badge badge-emerald">FREE</span>
+        </div>
+        
+        <div class="summary-divider"></div>
+        
+        <div class="summary-row total-row">
+          <span>Total Amount</span>
+          <span class="price-text">₹{{ cartTotal | number:'1.2-2' }}</span>
+        </div>
+
+        <button class="btn btn-primary full-width mt-4 btn-xl animate-pulse-glow" routerLink="/checkout">
+          Proceed to Checkout
+        </button>
+
+        <div class="summary-footer">
+          <p>🔒 Secure Checkout Guaranteed</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

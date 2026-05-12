@@ -1,0 +1,58 @@
+<div class="wallet-page container">
+  <!-- Hero Balance Card -->
+  <div class="balance-hero glass-card">
+    <span class="balance-label">Current Balance</span>
+    <div class="balance-amount-wrapper">
+      <span class="currency-symbol">₹</span>
+      <h1 class="balance-value shimmer-text">
+        {{ (wallet?.balance || 0) | number:'1.2-2' }}
+      </h1>
+    </div>
+    <div class="balance-shimmer"></div>
+  </div>
+
+  <div class="recharge-section glass-card">
+    <h2 class="section-title">Recharge Wallet</h2>
+    
+    <!-- Preset Amounts -->
+    <div class="preset-amounts">
+      <button 
+        *ngFor="let amount of [500, 1000, 2500, 5000]" 
+        (click)="rechargeAmount = amount"
+        [class.active]="rechargeAmount === amount"
+        class="preset-pill">
+        ₹{{ amount | number }}
+      </button>
+    </div>
+
+    <!-- Custom Amount Input -->
+    <div class="custom-amount">
+      <label for="customAmount">Or enter custom amount</label>
+      <div class="input-with-prefix">
+        <span class="prefix">₹</span>
+        <input 
+          id="customAmount"
+          type="number" 
+          [(ngModel)]="rechargeAmount" 
+          placeholder="Enter amount"
+          class="input-glow">
+      </div>
+    </div>
+
+    <div class="error-msg" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <button 
+      class="btn btn-primary btn-xl full-width mt-4 animate-pulse-glow" 
+      [disabled]="!rechargeAmount || rechargeAmount <= 0 || recharging"
+      (click)="recharge()">
+      <span *ngIf="!recharging">Add Money to Wallet</span>
+      <span *ngIf="recharging">Processing...</span>
+    </button>
+    
+    <div class="security-info">
+      <p>🛡️ Secured by Razorpay</p>
+    </div>
+  </div>
+</div>

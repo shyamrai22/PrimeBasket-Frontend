@@ -1,0 +1,405 @@
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--admin-border);
+  gap: 0.5rem;
+  margin-bottom: var(--spacing-lg);
+  width: fit-content;
+}
+
+.tab-btn {
+  background: transparent;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--admin-text-muted);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: var(--admin-text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tab-btn:hover .tab-icon {
+  transform: scale(1.1);
+}
+
+.tab-btn.active {
+  background: var(--admin-surface);
+  color: var(--admin-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 
+              0 0 0 1px rgba(108, 99, 255, 0.1);
+}
+
+.tab-btn.active .tab-icon {
+  color: var(--admin-primary);
+  opacity: 1;
+}
+
+.tab-count {
+  background: var(--admin-primary);
+  color: white;
+  padding: 0.1rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(108, 99, 255, 0.3);
+}
+
+.admin-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.admin-subtitle {
+  color: var(--admin-text-muted);
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+/* Merchant Cards */
+.merchant-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.merchant-card {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  gap: var(--spacing-lg);
+  transition: transform 0.3s ease;
+}
+
+.merchant-card:hover {
+  transform: translateX(5px);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.m-avatar {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 50%;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--admin-primary);
+  font-family: var(--font-admin-head);
+}
+
+.m-avatar.approved { color: var(--admin-success); border-color: rgba(16, 185, 129, 0.3); }
+.m-avatar.rejected { color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.3); }
+
+.m-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.m-content h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.m-email {
+  font-size: 0.85rem;
+  color: var(--admin-text-muted);
+}
+
+.m-meta {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.meta-tag {
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--admin-text-muted);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.m-desc {
+  font-size: 0.85rem;
+  color: var(--admin-text-primary);
+  opacity: 0.8;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.5rem;
+  border-radius: 4px;
+  border-left: 2px solid var(--admin-primary);
+}
+
+.m-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Approval/Rejection Buttons */
+.btn-approve, .btn-reject, .btn-revoke, .btn-reapprove {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-approve {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--admin-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.btn-approve svg { width: 16px; height: 16px; }
+
+.btn-approve:hover {
+  background: var(--admin-success);
+  color: white;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-reject {
+  background: transparent;
+  color: var(--admin-danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-reject svg { width: 16px; height: 16px; }
+
+.btn-reject:hover {
+  background: var(--admin-danger);
+  color: white;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-revoke { background: rgba(245, 158, 11, 0.1); color: var(--admin-warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+.btn-revoke:hover { background: var(--admin-warning); color: white; }
+
+.btn-reapprove { background: transparent; color: var(--admin-success); border: 1px solid rgba(16, 185, 129, 0.3); }
+.btn-reapprove:hover { background: var(--admin-success); color: white; }
+
+/* Modal Components */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 2rem;
+}
+
+.modal-card {
+  max-width: 480px;
+  width: 100%;
+  padding: 3rem;
+  text-align: center;
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.icon-circle.success { 
+  background: rgba(16, 185, 129, 0.1); 
+  color: var(--admin-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.icon-circle.danger { 
+  background: rgba(239, 68, 68, 0.1); 
+  color: var(--admin-danger);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+}
+
+.modal-card h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--admin-text-primary);
+}
+
+.modal-card p {
+  color: var(--admin-text-muted);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.modal-footer .btn {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--admin-text-muted);
+  border: 1px solid var(--admin-border);
+}
+
+.btn-text:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--admin-text-primary);
+}
+
+.btn-approve-solid { 
+  background: var(--admin-success); 
+  color: white; 
+  border: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-approve-solid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-reject-solid { 
+  background: var(--admin-danger); 
+  color: white; 
+  border: none;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-reject-solid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.admin-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  color: var(--admin-text-primary);
+  margin-bottom: 2rem;
+  resize: none;
+  min-height: 120px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.admin-textarea:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.approval-date, .rejection-reason {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px dashed var(--admin-border);
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--admin-text-primary);
+}
+
+.empty-state p {
+  color: var(--admin-text-muted);
+  font-size: 1rem;
+}
+
+.check-animation {
+  width: 80px;
+  height: 80px;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--admin-success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.1);
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.scale-in {
+  animation: scaleIn 0.4s ease-out;
+}

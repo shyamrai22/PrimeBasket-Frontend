@@ -1,0 +1,28 @@
+<div class="pending-container">
+  <div class="pending-card glass-card scale-in">
+    <div class="status-visual">
+      <div class="pulse-ring"></div>
+      <div class="clock-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+    </div>
+    
+    <h1 class="text-gradient">Your store is under review</h1>
+    <p class="description">
+      The PrimeBasket team is reviewing your merchant application. 
+      You'll receive full access once your profile is verified. 
+      This usually takes 24–48 hours.
+    </p>
+
+    <div class="user-pill" *ngIf="email">
+      <span class="icon">📧</span>
+      <span class="email">{{ email }}</span>
+    </div>
+
+    <button class="btn-logout" (click)="onLogout()">
+      Logout & Return Home
+    </button>
+  </div>
+</div>

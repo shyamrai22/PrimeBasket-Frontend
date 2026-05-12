@@ -1,0 +1,50 @@
+<div class="auth-page">
+  <div class="auth-card glass-card">
+    <div class="auth-header">
+      <h1 class="text-gradient">Welcome Back</h1>
+      <p>Enter your credentials to access your basket</p>
+    </div>
+
+    <form class="auth-form" (submit)="onSubmit()">
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="loginData.email" 
+          name="email" 
+          required 
+          placeholder="e.g. user@primebasket.com"
+          class="input-glow">
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          [(ngModel)]="loginData.password" 
+          name="password" 
+          required 
+          placeholder="••••••••"
+          class="input-glow">
+      </div>
+
+      <div class="error-msg" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <button type="submit" class="btn btn-primary full-width mt-4 btn-xl animate-pulse-glow" [disabled]="loading">
+        <span *ngIf="!loading">Login to PrimeBasket</span>
+        <div *ngIf="loading" class="btn-spinner"></div>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/register">Sign Up</a></p>
+      <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+        System Administrator? <a routerLink="/admin/login">Admin Portal</a>
+      </p>
+    </div>
+  </div>
+</div>

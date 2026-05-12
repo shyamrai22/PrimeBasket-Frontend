@@ -1,0 +1,79 @@
+<div class="admin-page">
+  <header class="admin-header">
+    <div class="header-main">
+      <h1>Order Management <span class="badge-pill">{{ filteredOrders.length }} Total</span></h1>
+      <p>Platform-wide order pipeline control</p>
+    </div>
+  </header>
+
+  <!-- Filter & Search Bar -->
+  <div class="filter-controls sticky-bar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Search by Order ID or User ID...">
+    </div>
+
+    <div class="filter-pills">
+      <button 
+        *ngFor="let status of ['All', 'Pending', 'Paid', 'Delivered', 'Cancelled']"
+        (click)="filterStatus = status; applyFilters()"
+        [class.active]="filterStatus === status"
+        class="filter-pill">
+        {{ status }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="table-container glass-card">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Payment</th>
+          <th>Status</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders" [class.updating]="order.updating">
+          <td><span class="mono clickable" (click)="copyId(order.id)">#{{ order.id }}</span></td>
+          <td>
+            <div class="user-info">
+              <span class="u-id">User_{{ order.userId }}</span>
+            </div>
+          </td>
+          <td>{{ order.createdAt | date:'mediumDate' }}</td>
+          <td><span class="amount-text">₹{{ order.totalAmount | number:'1.2-2' }}</span></td>
+          <td><span class="badge-small" [ngClass]="order.paymentMethod">{{ order.paymentMethod }}</span></td>
+          <td><span class="status-pill" [attr.data-status]="order.status">{{ order.status }}</span></td>
+          <td class="text-right">
+            <div class="status-selector-wrapper">
+              <select 
+                class="status-select-pill" 
+                [ngModel]="order.status" 
+                (change)="updateStatus(order, $event)">
+                <option value="Pending">Set Pending</option>
+                <option value="Paid">Set Paid</option>
+                <option value="Delivered">Set Delivered</option>
+                <option value="Cancelled">Set Cancelled</option>
+              </select>
+              <div class="inline-spinner" *ngIf="order.updating"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="empty-state" *ngIf="!loading && filteredOrders.length === 0">
+      <div class="empty-icon">📂</div>
+      <h3>No orders match your filters</h3>
+      <button class="btn-text" (click)="resetFilters()">Clear Filters</button>
+    </div>
+  </div>
+</div>

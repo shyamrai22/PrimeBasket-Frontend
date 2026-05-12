@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+:root {
+  /* Storefront Palette (kept for reference/context) */
+  --color-bg: #0D0F1A;
+  --color-surface: #151828;
+  
+  /* Admin MISSION CONTROL Palette */
+  --admin-bg: #080A12;
+  --admin-surface: #0F1120;
+  --admin-card: #141728;
+  --admin-primary: #6C63FF;
+  --admin-success: #10B981;
+  --admin-danger: #EF4444;
+  --admin-warning: #F59E0B;
+  --admin-info: #3B82F6;
+  --admin-text-primary: #E8E9F3;
+  --admin-text-muted: #6B7280;
+  --admin-border: rgba(255, 255, 255, 0.06);
+
+  /* Merchant GROWTH Palette */
+  --merchant-bg: #080B12;
+  --merchant-surface: #0F1420;
+  --merchant-card: #141C2E;
+  --merchant-primary: #0D9488;
+  --merchant-accent: #F59E0B;
+  --merchant-success: #22C55E;
+  --merchant-danger: #EF4444;
+  --merchant-warning: #F59E0B;
+  --merchant-text-primary: #E8F0EF;
+  --merchant-text-muted: #6B7280;
+  --merchant-border: rgba(13, 148, 136, 0.12);
+
+  /* Admin Typography */
+  --font-admin-head: 'Syne', sans-serif;
+  --font-admin-data: 'Space Grotesk', monospace;
+  --font-admin-body: 'Inter', sans-serif;
+  
+  /* Shared */
+  --color-primary: #6C63FF;
+  --color-primary-gradient: linear-gradient(135deg, #6C63FF 0%, #8E89FF 100%);
+  --color-accent: #FF6584;
+  --color-success: #22D3A5;
+  --color-danger: #FF4D6D;
+  --color-warning: #FFB347;
+  
+  /* Text Colors */
+  --color-text-main: #F0F0FF;
+  --color-text-muted: #8B8FA8;
+  
+  /* UI Elements */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(21, 24, 40, 0.7);
+  --glass-blur: blur(12px);
+  
+  /* Shadows & Glows */
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+  --glow-primary: 0 0 20px rgba(108, 99, 255, 0.3);
+  --glow-accent: 0 0 20px rgba(255, 101, 132, 0.3);
+  
+  /* Spacing & Radii */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.price-text {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--color-success);
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border);
+}
+
+.glass-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: var(--glass-blur);
+  transition: all var(--transition-normal);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+}
+
+/* Button System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background: var(--color-primary-gradient);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--glow-primary);
+  filter: brightness(1.1);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: white;
+}
+
+.btn-accent:hover {
+  box-shadow: var(--glow-accent);
+}
+
+.btn-pill {
+  border-radius: var(--radius-full);
+}
+
+/* Badges */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+.badge-coral { background: var(--color-accent); color: white; }
+.badge-emerald { background: var(--color-success); color: #0D0F1A; }
+.badge-muted { background: rgba(255, 255, 255, 0.1); color: var(--color-text-muted); }
+
+/* Form Elements */
+.input-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.input-glow {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1.2rem;
+  color: var(--color-text-main);
+  transition: all var(--transition-fast);
+  font-family: 'Inter', sans-serif;
+}
+
+.input-glow:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: var(--glow-primary);
+}
+
+/* Dropdown Visibility Fix */
+select {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: #151828; /* Equivalent to var(--color-surface) */
+  color: #F0F0FF; /* Equivalent to var(--color-text-main) */
+}
+
+/* Animations */
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(108, 99, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Common Layout */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

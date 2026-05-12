@@ -1,0 +1,147 @@
+<div class="admin-page">
+  <header class="admin-header">
+    <div class="header-main">
+      <h1>Dashboard <span class="badge-pill">Live Ops</span></h1>
+      <p>Platform overview and real-time operations</p>
+    </div>
+    <div class="header-actions">
+      <span class="last-sync">Last updated: {{ lastSync | date:'shortTime' }}</span>
+    </div>
+  </header>
+
+  <!-- KPI Row -->
+  <div class="kpi-grid">
+    <div class="kpi-card violet">
+      <div class="kpi-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Total Revenue</span>
+        <h2 class="kpi-value">₹{{ stats.totalRevenue | number:'1.0-0' }}</h2>
+        <div class="kpi-trend positive">+12% from last week</div>
+      </div>
+    </div>
+
+    <div class="kpi-card blue">
+      <div class="kpi-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Total Orders</span>
+        <h2 class="kpi-value">{{ stats.totalOrders }}</h2>
+        <div class="kpi-trend positive">54 new today</div>
+      </div>
+    </div>
+
+    <div class="kpi-card amber" [class.pulse-warning]="stats.pendingOrders > 10">
+      <div class="kpi-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Pending Orders</span>
+        <h2 class="kpi-value">{{ stats.pendingOrders }}</h2>
+        <div class="kpi-trend" [class.warning]="stats.pendingOrders > 10">Requires attention</div>
+      </div>
+    </div>
+
+    <div class="kpi-card emerald">
+      <div class="kpi-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Completed Orders</span>
+        <h2 class="kpi-value">{{ stats.completedOrders }}</h2>
+        <div class="kpi-trend positive">98% fulfillment rate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-grid">
+    <!-- Recent Orders Table -->
+    <section class="dashboard-section glass-card full-width">
+      <div class="section-header">
+        <h3 class="text-gradient">Recent Operations</h3>
+        <a routerLink="/admin/orders" class="link-btn">See All Orders →</a>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="admin-table compact">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer ID</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of recentOrders">
+              <td><span class="mono">#{{ order.orderId }}</span></td>
+              <td>User_{{ order.userId }}</td>
+              <td class="text-emerald bold">₹{{ order.totalAmount | number }}</td>
+              <td><span class="badge-small" [ngClass]="order.paymentMethod">{{ order.paymentMethod }}</span></td>
+              <td><span class="status-pill" [attr.data-status]="order.status">{{ order.status }}</span></td>
+              <td class="text-muted">{{ order.createdAt | date:'shortTime' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Side Widgets -->
+    <div class="widget-col">
+      <!-- Merchant Approvals Widget -->
+      <section class="dashboard-section glass-card">
+        <div class="section-header">
+          <h3>Pending Merchants</h3>
+          <a routerLink="/admin/merchants" class="link-btn">View All</a>
+        </div>
+        <div class="widget-list">
+          <div class="merchant-item" *ngFor="let merchant of pendingMerchants">
+            <div class="merchant-info">
+              <span class="m-name">{{ merchant.businessName || merchant.fullName }}</span>
+              <span class="m-email">{{ merchant.businessType || 'Retailer' }}</span>
+            </div>
+            <div class="m-actions">
+              <button class="btn-icon approve" (click)="approveMerchant(merchant.id)">✓</button>
+              <button class="btn-icon reject" (click)="rejectMerchant(merchant.id)">×</button>
+            </div>
+          </div>
+          <div class="empty-widget" *ngIf="pendingMerchants.length === 0">
+            <div class="check-icon">✓</div>
+            <p>All caught up!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Low Stock Alert Widget -->
+      <section class="dashboard-section glass-card">
+        <div class="section-header">
+          <h3>Low Stock Alert</h3>
+        </div>
+        <div class="widget-list">
+          <div class="stock-item" *ngFor="let product of lowStockProducts">
+            <div class="s-info">
+              <span class="s-name">{{ product.name }}</span>
+              <span class="s-cat">{{ product.category }}</span>
+            </div>
+            <div class="s-value warning">{{ product.stock }} left</div>
+          </div>
+          <div class="all-healthy" *ngIf="lowStockProducts.length === 0">
+            🛡️ All products healthy
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

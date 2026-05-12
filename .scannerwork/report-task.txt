@@ -1,0 +1,6 @@
+projectKey=PrimeBasket-Frontend
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=PrimeBasket-Frontend
+ceTaskId=fb812de2-8b1c-4694-a410-c1713c6594ec
+ceTaskUrl=http://localhost:9000/api/ce/task?id=fb812de2-8b1c-4694-a410-c1713c6594ec

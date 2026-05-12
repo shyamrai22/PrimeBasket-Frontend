@@ -1,0 +1,64 @@
+<div class="checkout-page container">
+  <div class="checkout-container glass-card" *ngIf="!orderSuccess">
+    <h1 class="page-title text-gradient">Checkout</h1>
+
+    <!-- Order Total Summary -->
+    <div class="total-highlight">
+      <span class="label">Amount to Pay</span>
+      <span class="price-text">₹{{ totalAmount | number:'1.2-2' }}</span>
+    </div>
+
+    <div class="payment-section">
+      <h3>Select Payment Method</h3>
+      <div class="payment-methods">
+        <!-- COD Card -->
+        <div class="payment-card" [class.selected]="paymentMethod === 'COD'" (click)="paymentMethod = 'COD'">
+          <div class="card-icon">💵</div>
+          <div class="card-info">
+            <span class="method-name">Cash on Delivery</span>
+            <span class="method-desc">Pay at your door</span>
+          </div>
+          <div class="selection-check">✓</div>
+        </div>
+
+        <!-- Wallet Card -->
+        <div class="payment-card" 
+             [class.selected]="paymentMethod === 'Wallet'" 
+             [class.disabled]="walletBalance < totalAmount"
+             (click)="walletBalance >= totalAmount ? paymentMethod = 'Wallet' : null">
+          <div class="card-icon">👛</div>
+          <div class="card-info">
+            <span class="method-name">PrimeBasket Wallet</span>
+            <span class="method-desc">Current Balance: ₹{{ walletBalance | number:'1.2-2' }}</span>
+          </div>
+          <div class="selection-check">✓</div>
+          <div class="insufficient-msg" *ngIf="walletBalance < totalAmount">
+            Insufficient balance. <a routerLink="/wallet">Recharge →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-msg" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <button 
+      class="btn btn-primary btn-xl full-width mt-4 animate-pulse-glow" 
+      [disabled]="!paymentMethod || processing"
+      (click)="placeOrder()">
+      <span *ngIf="!processing">Place Order • ₹{{ totalAmount | number:'1.2-2' }}</span>
+      <span *ngIf="processing">Processing...</span>
+    </button>
+  </div>
+
+  <!-- Success State -->
+  <div class="success-container glass-card scale-in" *ngIf="orderSuccess">
+    <div class="confetti-placeholder">🎉</div>
+    <div class="success-icon">✅</div>
+    <h2>Order Placed Successfully!</h2>
+    <p>Your order has been confirmed and is being prepared.</p>
+    <div class="redirect-msg">Redirecting to orders in {{ countdown }}s...</div>
+    <a routerLink="/orders" class="btn btn-primary btn-pill mt-4">View My Orders</a>
+  </div>
+</div>

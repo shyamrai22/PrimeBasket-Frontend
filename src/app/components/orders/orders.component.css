@@ -167,7 +167,7 @@
   font-size: 1.75rem;
   font-weight: 900;
   color: var(--color-primary);
-  background: var(--gradient-primary);
+  background: var(--color-primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

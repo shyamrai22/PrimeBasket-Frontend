@@ -54,10 +54,8 @@
           <span class="amount">₹{{ order.totalAmount | number }}</span>
         </div>
         <div class="actions" *ngIf="order.status !== 'Delivered' && order.status !== 'Cancelled'">
-          <button class="btn-action secondary" *ngIf="order.status === 'Pending'" (click)="updateStatus(order, 'Processing')">Process Order</button>
-          <button class="btn-action primary" *ngIf="order.status === 'Processing'" (click)="updateStatus(order, 'Shipped')">Mark as Shipped</button>
+          <button class="btn-action primary" *ngIf="order.status === 'Pending' || order.status === 'Processing'" (click)="updateStatus(order, 'Shipped')">Mark as Shipped</button>
           <button class="btn-action success" *ngIf="order.status === 'Shipped'" (click)="updateStatus(order, 'Delivered')">Confirm Delivery</button>
-          <button class="btn-action danger" *ngIf="order.status === 'Pending'" (click)="updateStatus(order, 'Cancelled')">Cancel</button>
         </div>
       </div>
     </div>
